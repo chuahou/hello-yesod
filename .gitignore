@@ -20,3 +20,6 @@ cabal.sandbox.config
 *~
 \#*
 hello-yesod.cabal
+/dist*/
+/result
+/.direnv/
