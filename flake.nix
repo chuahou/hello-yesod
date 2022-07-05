@@ -14,7 +14,8 @@
   outputs = inputs@{ self, nixpkgs, haskellNix, ... }:
   let
     system = "x86_64-linux";
-    compiler-nix-name = "ghc902";
+    compiler-version = "902";
+    compiler-nix-name = "ghc${compiler-version}";
     compiler = pkgs.haskell-nix.compiler.${compiler-nix-name};
     overlays = [
       haskellNix.overlay
@@ -45,7 +46,10 @@
       dev = pkgs.hello-yesod.shellFor {
         nativeBuildInputs = with pkgs; [
           cabal-install
-          haskell-language-server
+          (haskell-language-server.override {
+            dynamic = true; # Required for Template Haskell. See HLS#2665.
+            supportedGhcVersions = [ compiler-version ];
+          })
           hpack
           stack
         ];
