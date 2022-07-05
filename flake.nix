@@ -43,8 +43,12 @@
       };
       # Development shell for use with `nix develop`.
       dev = pkgs.hello-yesod.shellFor {
-        tools = { cabal = {}; haskell-language-server = {}; };
-        buildInputs = with pkgs; [ hpack stack ];
+        nativeBuildInputs = with pkgs; [
+          cabal-install
+          haskell-language-server
+          hpack
+          stack
+        ];
         exactDeps = true;
       };
     };
