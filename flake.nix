@@ -21,7 +21,13 @@
     overlays = [
       haskellNix.overlay
       (self: super: {
-        hello-yesod = self.haskell-nix.stackProject' { src = ./.; };
+        hello-yesod = self.haskell-nix.stackProject' {
+          src = self.haskell-nix.haskellLib.cleanSourceWith {
+            name = "hello-yesod-source";
+            src = ./.;
+          };
+          materialized = ./materialized/hello-yesod;
+        };
       })
     ];
     pkgs = import nixpkgs {
@@ -45,6 +51,11 @@
       };
       # Development shell for use with `nix develop`.
       dev = pkgs.hello-yesod.shellFor {
+        tools.hoogle = {
+          version = "5.0.18.3";
+          index-state = "2022-07-04T00:00:00Z";
+          materialized = ./materialized/hoogle;
+        };
         nativeBuildInputs = with pkgs; [
           cabal-install
           (haskell-language-server.override {
