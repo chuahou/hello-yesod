@@ -19,10 +19,7 @@
     overlays = [
       haskellNix.overlay
       (self: super: {
-        hello-yesod = self.haskell-nix.project' {
-          src = ./.;
-          inherit compiler-nix-name;
-        };
+        hello-yesod = self.haskell-nix.stackProject' { src = ./.; };
       })
     ];
     pkgs = import nixpkgs {
