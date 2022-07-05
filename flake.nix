@@ -1,6 +1,7 @@
 {
   inputs = {
     flake-compat = { url = "github:edolstra/flake-compat"; flake = false; };
+    flake-utils.url = "github:numtide/flake-utils";
     haskellNix.url = "github:input-output-hk/haskell.nix";
     nixpkgs.follows = "haskellNix/nixpkgs-unstable";
   };
@@ -11,9 +12,9 @@
     extra-trusted-public-keys = "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=";
   };
 
-  outputs = inputs@{ self, nixpkgs, haskellNix, ... }:
+  outputs = inputs@{ self, nixpkgs, flake-utils, haskellNix, ... }:
+  flake-utils.lib.eachSystem [ "x86_64-linux" ] (system:
   let
-    system = "x86_64-linux";
     compiler-version = "902";
     compiler-nix-name = "ghc${compiler-version}";
     compiler = pkgs.haskell-nix.compiler.${compiler-nix-name};
@@ -31,11 +32,11 @@
 
   in flake // {
     inherit pkgs;
-    defaultPackage.${system} = flake.packages."hello-yesod:exe:hello-yesod" // {
+    defaultPackage = flake.packages."hello-yesod:exe:hello-yesod" // {
       meta.mainProgram = "hello-yesod"; # Necessary for nix-run to work.
     };
-    devShell.${system} = self.devShells.${system}.stack;
-    devShells.${system} = {
+    devShell = self.devShells.${system}.stack;
+    devShells = {
       # For stack's use when building.
       stack = pkgs.mkShell {
         buildInputs = with pkgs; [ compiler git nix stack zlib ];
@@ -56,5 +57,5 @@
         exactDeps = true;
       };
     };
-  };
+  });
 }
