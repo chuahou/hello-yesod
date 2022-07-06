@@ -38,9 +38,7 @@
 
   in flake // {
     inherit pkgs;
-    defaultPackage = flake.packages."hello-yesod:exe:hello-yesod" // {
-      meta.mainProgram = "hello-yesod"; # Necessary for nix-run to work.
-    };
+    defaultPackage = flake.packages."hello-yesod:exe:hello-yesod";
     devShell = self.devShells.${system}.stack;
     devShells = {
       # For stack's use when building.
