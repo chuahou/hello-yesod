@@ -61,7 +61,6 @@
             supportedGhcVersions = [ compiler-version ];
           })
           hpack
-          stack
         ];
         exactDeps = true;
       };

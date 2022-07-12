@@ -1,0 +1,8 @@
+cradle:
+  cabal:
+    - path: "./src"
+      component: "lib:hello-yesod"
+    - path: "./app"
+      component: "exe:hello-yesod"
+    - path: "./test"
+      component: "test:hello-yesod-test"
